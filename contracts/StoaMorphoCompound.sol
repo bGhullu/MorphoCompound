@@ -45,10 +45,10 @@ contract StoaMorphoCompound {
         _supplyERC20(i_CDAI, i_DAI, _amount);
     }
 
-    function supplyETH() external payable {
-        IWETH9(i_WETH).deposit{value: msg.value}();
+    function supplyETH(uint256 _amount) external payable {
+        IWETH9(i_WETH).deposit{value: _amount}();
 
-        _supplyERC20(i_CETH, i_WETH, msg.value);
+        _supplyERC20(i_CETH, i_WETH, _amount);
     }
 
     function claimRewards() external {
