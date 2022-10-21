@@ -4,12 +4,7 @@ pragma solidity ^0.8.16;
 
 import {IMorpho} from "./interface/IMorpho.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
-interface IWETH9 {
-    function deposit() external payable;
-
-    function withdraw(uint256) external;
-}
+import {IWETH9} from "./interface/IWETH9.sol";
 
 contract StoaMorphoCompound {
     address private immutable i_MORPHO;
@@ -41,14 +36,14 @@ contract StoaMorphoCompound {
         IMorpho(i_MORPHO).supply(_cToken, address(this), _amount);
     }
 
-    function supplyDAI(uint256 _amount) external payable {
+    function supplyDAI(uint256 _amount) external {
         _supplyERC20(i_CDAI, i_DAI, _amount);
     }
 
-    function supplyETH(uint256 _amount) external payable {
-        IWETH9(i_WETH).deposit{value: _amount}();
+    function supplyETH() external payable {
+        IWETH9(i_WETH).deposit{value: msg.value}();
 
-        _supplyERC20(i_CETH, i_WETH, _amount);
+        _supplyERC20(i_CETH, i_WETH, msg.value);
     }
 
     function claimRewards() external {
