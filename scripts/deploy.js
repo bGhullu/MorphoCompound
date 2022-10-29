@@ -30,9 +30,14 @@ async function main() {
     
       await moveBlocks(1, (sleepAmount = 1000))
     }
+
+    await vault.claimRewards()
+    console.log("Rewards Claimed")
   
     await vault.withdrawETH(AMOUNT)
     console.log("Withdraw Success!")
+
+  
 
    
 }

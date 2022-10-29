@@ -10,21 +10,15 @@ contract StoaMorphoCompound {
     address private immutable i_MORPHO;
     address private immutable i_WETH;
     address private immutable i_CETH;
-    address private immutable i_DAI;
-    address private immutable i_CDAI;
 
     constructor(
         address _morpho,
         address _WETH,
-        address _CETH,
-        address _DAI,
-        address _CDAI
+        address _CETH
     ) {
         i_MORPHO = _morpho;
         i_WETH = _WETH;
         i_CETH = _CETH;
-        i_DAI = _DAI;
-        i_CDAI = _CDAI;
     }
 
     function _supplyERC20(
@@ -33,11 +27,7 @@ contract StoaMorphoCompound {
         uint256 _amount
     ) internal {
         IERC20(_underlying).approve(i_MORPHO, _amount);
-        IMorpho(i_MORPHO).supply(_cToken, address(this), _amount);
-    }
-
-    function supplyDAI(uint256 _amount) external {
-        _supplyERC20(i_CDAI, i_DAI, _amount);
+        IMorpho(i_MORPHO).supply(_cToken, msg.sender, _amount);
     }
 
     function supplyETH() external payable {
@@ -48,9 +38,8 @@ contract StoaMorphoCompound {
 
     function claimRewards() external {
         address[] memory poolTokens = new address[](2);
-        poolTokens[0] = i_CDAI;
+        // poolTokens[0] = i_CDAI;
         poolTokens[1] = i_CETH;
-
         IMorpho(i_MORPHO).claimRewards(poolTokens, false);
     }
 
@@ -58,13 +47,8 @@ contract StoaMorphoCompound {
         IMorpho(i_MORPHO).withdraw(_cToken, _amount);
     }
 
-    function withdrawDAI(uint256 _amount) external {
-        _withdrawERC20(i_CDAI, _amount);
-    }
-
     function withdrawETH(uint256 _amount) external {
         _withdrawERC20(i_CETH, _amount);
-
         IWETH9(i_WETH).withdraw(_amount);
     }
 }
