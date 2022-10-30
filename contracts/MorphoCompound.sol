@@ -6,7 +6,7 @@ import {IMorpho} from "./interface/IMorpho.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IWETH9} from "./interface/IWETH9.sol";
 
-contract StoaMorphoCompound {
+contract MorphoCompound {
     address private immutable i_MORPHO;
     address private immutable i_WETH;
     address private immutable i_CETH;
